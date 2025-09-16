@@ -8,8 +8,7 @@ from telegram.constants import ChatAction
 from telegram.ext import Application, CommandHandler, ContextTypes
 from github import Github, InputGitTreeElement, Auth
 
-TELEGRAM_TOKEN = '7255048090:AAEZig3P_rzAS-cKwcxMh0X13TQ3T7cezbM'
-
+TELEGRAM_TOKEN = '7255048090:AAEZig3P_rzAS-l'
 ADMIN_IDS = {5588464519}
 DATA_FILE = 'Venom.json'
 
